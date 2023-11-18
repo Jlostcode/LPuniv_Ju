@@ -18,7 +18,7 @@
 <body>
 
 <div class="insert_wrap">
-    <form id="insert_form" action="/amc/amc_insert" method="post" enctype="multipart/form-data">
+    <form id="insert_form" action="/amc/upload" method="post" enctype="multipart/form-data">
         <div>
 
 <!--            <div class="user_name">-->
@@ -40,7 +40,8 @@
             <hr>
             <div class="hidden_data">
 
-                <input type="hidden"  name="occ_NO" style="width:400px;" th:value="${occ_NO}"  readonly>
+                <input type="hidden"  name="occ_no" style="width:400px;" th:value="${occ_no}"  readonly>
+                <input type="hidden"  name="ccim_no" style="width:400px;" th:value="${ccim_no}"  readonly>
 
 
             </div>
@@ -61,7 +62,9 @@
 
             <div class="submit">
                 <div class="button-effect">
-                    <input type="submit" value="업로드"/>
+
+                    <button type="button" onclick="submitForm()">업로드</button>
+
                 </div>
             </div>
         </div>

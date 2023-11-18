@@ -16,7 +16,6 @@ public class AmcDto {
     int occ_no;
     String amc_at;  //과제명(AssignmentName)
     String amc_ac;  //과제설명(AssignMentContent)
-    int amfi_no;
 
 
 }

@@ -12,7 +12,15 @@ function getVideoDuration() {
 
     // YouTube API를 사용하여 동영상 정보 가져오기
     fetch(`https://www.googleapis.com/youtube/v3/videos?id=${videoId}&key=${apiKey}&part=contentDetails`)
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                // 응답이 실패하면 에러를 던지고 이후의 Promise 체인이 실행되지 않도록 함
+                document.getElementById('videoID').value = '';  // 입력 필드의 값을 삭제
+                throw new Error('해당 영상 존재하지 않습니다. ID를 확인해주세요.');
+            }
+
+            return response.json();
+        })
         .then(data => {
             // 동영상의 재생 시간 정보를 ISO 8601 형식에서 파싱
             const duration = data.items[0].contentDetails.duration;
@@ -32,7 +40,9 @@ function getVideoDuration() {
         })
         .catch(error => {
             alert('해당 영상 존재하지 않습니다. ID를 확인해주세요.');
+            document.getElementById('videoID').value = '';  // 입력 필드의 값을 삭제
             console.error('Error fetching video data:', error);
+
         });
 }
 

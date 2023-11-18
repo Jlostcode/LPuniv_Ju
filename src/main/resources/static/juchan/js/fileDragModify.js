@@ -5,7 +5,7 @@ $(document).ready(function () {
 
     // Dropzone 설정
     var dropzone = new Dropzone("#dropzoneForm", {
-        url:"/amc/upload",
+        url:"/amc/modify",
         method: "post",
         autoProcessQueue: false, // 자동으로 보내기. true : 파일 업로드 되자마자 서버로 요청, false : 서버에는 올라가지 않은 상태.
         paramName: "files",  // 파일 파라미터 이름
@@ -42,6 +42,7 @@ $(document).ready(function () {
 
             formData.append("occ_no", document.getElementsByName("occ_no")[0].value);
             formData.append("ccim_no", document.getElementsByName("ccim_no")[0].value);
+            formData.append("amc_no", document.getElementsByName("amc_no")[0].value);
 
             // 중복으로 amc_at을 추가하지 않도록 확인
             if (!formData.has("amc_at")) {
@@ -54,6 +55,8 @@ $(document).ready(function () {
             console.log(document.getElementsByName("ccim_no")[0].value);
             console.log(document.getElementsByName("amc_at")[0].value);
             console.log(document.getElementsByName("amc_ac")[0].value);
+            console.log(document.getElementsByName("amc_no")[0].value);
+
         }
     });
     dropzone.on("success", function(file, response) {
@@ -61,12 +64,12 @@ $(document).ready(function () {
         // 서버에서 전달받은 응답(response)를 확인하여 추가 동작 수행 가능
 
         // 폼을 서버에 제출
-        $("#insert_form").submit();
+        $("#modify_form").submit();
         window.location.href = '/amc' + '?occ_no=' + document.getElementsByName("occ_no")[0].value + '&ccim_no=' + document.getElementsByName("ccim_no")[0].value;
 
     });
 // 기타 Dropzone 이벤트 등록 가능
-    $("#insert_form").submit(function (event) {
+    $("#modify_form").submit(function (event) {
         event.preventDefault();
         event.stopPropagation();
         dropzone.processQueue(); // Dropzone에 파일 업로드 수행
@@ -76,15 +79,63 @@ $(document).ready(function () {
 
 });
 
-function submitForm() {
-    if (confirm("파일 업로드가 완료되었습니다. 내용을 확인하셨나요?")) {
-        // 확인 버튼을 눌렀을 때의 동작
-        let dropzone = Dropzone.forElement("#dropzoneForm");
-        dropzone.processQueue();
+function submitFormModify() {
+    let modifyForm = document.getElementById("modify_form");
+    let dropzone = Dropzone.forElement("#dropzoneForm");
+    console.log("submitFormModify called");
+    // Dropzone 큐에 파일이 있는지 확인
+    if (dropzone.files.length > 0) {
+        if (confirm("파일 업로드가 완료되었습니다. 내용을 확인하셨나요?")) {
+            // 확인 버튼을 눌렀을 때의 동작
+            // 파일이 없으면 추가적인 유효성 검사 수행
+            let amcAtValue = document.getElementsByName("amc_at")[0].value;
+            let amcAcValue = document.getElementsByName("amc_ac")[0].value;
+
+            // amc_at나 amc_ac이 비어있으면 알림 표시 및 제출 막기
+            if (amcAtValue.trim() === '' || amcAcValue.trim() === '') {
+                alert("과제명과 과제 내용은 필수 입력 항목입니다.");
+            } else {
+                // 필수 입력이 모두 완료되었을 때 폼 제출
+                let dropzone = Dropzone.forElement("#dropzoneForm");
+                dropzone.processQueue();
+                modifyForm.submit();
+            }
+
+        } else {
+            // 취소 버튼을 눌렀을 때의 동작 (예를 들어, 다른 동작 수행)
+            console.log("사용자가 확인하지 않고 취소했습니다.");
+        }
     } else {
-        // 취소 버튼을 눌렀을 때의 동작 (예를 들어, 다른 동작 수행)
-        console.log("사용자가 확인하지 않고 취소했습니다.");
+        // 파일이 없으면 추가적인 유효성 검사 수행
+        let amcAtValue = document.getElementsByName("amc_at")[0].value;
+        let amcAcValue = document.getElementsByName("amc_ac")[0].value;
+
+        // amc_at나 amc_ac이 비어있으면 알림 표시 및 제출 막기
+        if (amcAtValue.trim() === '' || amcAcValue.trim() === '') {
+            alert("과제명과 과제 내용은 필수 입력 항목입니다.");
+        } else {
+            // 필수 입력이 모두 완료되었을 때 폼 제출
+            modifyForm.submit();
+        }
     }
+}
 
-
+function deleteAmfi(amfiNO) {
+    $.ajax({
+        type: 'GET',
+        url: '/amfi/amfi_delete',
+        data: { amfi_no: document.getElementsByName("amfi_no")[0].value },
+        success: function (response) {
+            console.log(response); // 서버 응답을 콘솔에 출력
+                // 여기에서 적절한 방식으로 amfiDto를 사용
+            let amfiTag = "#" + amfiNO;
+                $(amfiTag).remove();
+                console.log(amfiNO)
+                // 삭제 완료 알림
+                alert("삭제 완료");
+        },
+        error: function (error) {
+            console.error('Error fetching data:', error);
+        }
+    });
 }

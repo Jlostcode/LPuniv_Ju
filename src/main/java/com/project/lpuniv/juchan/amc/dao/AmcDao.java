@@ -20,4 +20,6 @@ public interface AmcDao {
     AmcDto amcOneSelect (@Param("amc_no")int amc_no);
 
     void amcModify (@Param("amc_at") String amc_at, @Param("amc_ac") String amc_ac, @Param("amc_no") int amc_no);
+
+    Integer amcDelete (@Param("amc_no") int amd_no);
 }

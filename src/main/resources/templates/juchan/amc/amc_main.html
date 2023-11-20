@@ -9,8 +9,12 @@
 <div class="header"><strong>과제 목록</strong> <br></div>
 <div class="cards" style="justify-content: center; align-content: center; display: flex;">
     <div th:each="card, cardStat : ${listPage.amcDtos}" th:id="'card' + ${cardStat.index}" class="card" style="width: 18rem;">
-        <div class="card-header" style="background-color: #a2a8ff; height: 5rem;">
+        <div class="card-header" style="background-color: #a2a8ff; height: 5rem;  display: flex;">
             <p class="card-text"> 해당 강의 "[[${card.amc_at}]]" 챕터 관리</p>
+            <button type="button" class="btn btn-outline-primary delete-btn"
+                    th:data-amc-at="${card.amc_at}" th:data-amc-no="${card.amc_no}"
+                    th:data-occ-no="${occ_no}" th:data-ccim-no="${ccim_no}"
+                    style="height: 2rem; width: 4rem; font-size: 11px">삭제</button>
         </div>
         <div class="card-body">
             <h5 class="card-title" th:text="${card.amc_at}">Card title</h5>
@@ -87,6 +91,8 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/@coreui/coreui@4.3.0/dist/js/coreui.min.js" integrity="sha384-Ccu4pXX7m9x5nOmnhLGyxq3pqYWoc67qHmnJwC20bxJvdziB6gZtOAb9BLN5bOOb" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="/juchan/js/amc_main_infodata.js"></script>
+<script src="/juchan/js/deleteAmc.js"></script>
 </body>
 </html>

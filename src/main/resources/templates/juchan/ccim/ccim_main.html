@@ -9,7 +9,12 @@
 <div class="header"><strong>챕터 목록</strong> <br></div>
 <div class="cards" style="justify-content: center; align-content: center; display: flex;">
     <div th:each="card, cardStat : ${listPage.ccimDtos}" th:id="'card' + ${cardStat.index}" class="card" style="width: 25rem;">
-        <div class="card-header" style="background-color: #a2a8ff; height: 5rem;"></div>
+        <div class="card-header" style="background-color: #a2a8ff; height: 5rem; display: flex; justify-content: flex-end; align-items: flex-start;">
+            <button type="button" class="btn btn-outline-primary delete-btn"
+                    th:data-occ-no="${occ_NO}" th:data-ccim-no="${card.ccim_NO}"
+                    th:data-ccim-title="${card.ccim_title}"
+                    style="height: 2rem; width: 4rem; font-size: 11px">삭제</button>
+        </div>
         <div class="card-body">
             <h5 class="card-title" th:text="${card.ccim_title}">Card title</h5>
             <div th:id="'videoDiv' + ${card.ccim_NO}" class="youtube-video" th:attr="data-video-id=${card.ccim_videoID}"></div>
@@ -88,6 +93,8 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/@coreui/coreui@4.3.0/dist/js/coreui.min.js" integrity="sha384-Ccu4pXX7m9x5nOmnhLGyxq3pqYWoc67qHmnJwC20bxJvdziB6gZtOAb9BLN5bOOb" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="/juchan/js/ccim_main_infodata.js"></script>
+<script src="/juchan/js/deleteCcim.js"></script>
 </body>
 </html>

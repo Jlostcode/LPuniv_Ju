@@ -11,13 +11,12 @@ import com.project.lpuniv.junhyuk.dto.FileAttachment;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -26,9 +25,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Controller
 @Slf4j
@@ -175,5 +172,23 @@ public class AmcController {
         }
 
 
+    }
+
+    @GetMapping("/amc/amc_delete")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> amcDelete(
+            @RequestParam("amc_no") int amc_no, @RequestParam("amc_at") String amc_at) {
+        Map<String, Object> response = new HashMap<>();
+
+        // 삭제한 amfi_no를 응답 데이터에 추가
+        response.put("amc_no", amc_no);
+        response.put("amc_at", amc_at);
+
+        // 해당 amfi_no를 삭제
+        amcService.amcDelete(amc_no);
+
+        System.out.println("amc_no:" + amc_no);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

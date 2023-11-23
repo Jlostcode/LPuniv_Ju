@@ -7,15 +7,20 @@ import com.project.lpuniv.juchan.occ.service.OccService;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Controller
@@ -79,7 +84,27 @@ public class OccController {
     public String occModifyPost(OccDto occDto, HttpSession session){
         AuthInfo authInfo = (AuthInfo) session.getAttribute("authInfo");
         occDto.setTeach_NO(authInfo.getUser_no());
+        System.out.println(occDto);
         occService.occModify(occDto);
+
         return "redirect:/occ";
+    }
+
+    @GetMapping("/occ/occ_delete")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> occDelete(
+            @RequestParam("occ_no") int occ_no, @RequestParam("occ_title") String occ_title) {
+        Map<String, Object> response = new HashMap<>();
+
+        // 삭제한 amfi_no를 응답 데이터에 추가
+        response.put("occ_no", occ_no);
+        response.put("occ_title", occ_title);
+
+        // 해당 amfi_no를 삭제
+        occService.occDelete(occ_no);
+
+        System.out.println("occ_no:" + occ_no);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

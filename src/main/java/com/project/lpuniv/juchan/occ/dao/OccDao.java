@@ -18,4 +18,6 @@ public interface OccDao {
     OccDto occOneSelect(@Param("occ_NO")int occ_NO);
 
     void occModify(OccDto occDto);
+
+    Integer occDelete(@Param("occ_no") int occ_no);
 }

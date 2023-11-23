@@ -38,5 +38,7 @@ public class OccService {
         occDao.occModify(occDto);
     }
 
-
+    public Integer occDelete(int occ_no){
+        return occDao.occDelete(occ_no);
+    }
 }

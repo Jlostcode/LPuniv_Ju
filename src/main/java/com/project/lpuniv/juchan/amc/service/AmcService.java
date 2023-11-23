@@ -33,4 +33,8 @@ public class AmcService {
     public void amcModify(String amc_at, String amc_ac, int amc_no) {
         amcDao.amcModify(amc_at,amc_ac,amc_no);
     };
+
+    public Integer amcDelete(int amc_no) {
+        return amcDao.amcDelete(amc_no);
+    }
 }
